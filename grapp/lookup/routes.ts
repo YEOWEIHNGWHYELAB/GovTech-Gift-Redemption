@@ -9,5 +9,9 @@ module.exports = (pool: typeof Pool) => {
         lookupController.getTeamName(req, res, pool);
     });
 
+    router.post('/addteamname', (req: Request, res: Response) => {
+        lookupController.addTeamName(req, res, pool);
+    });
+
     return router;
 };

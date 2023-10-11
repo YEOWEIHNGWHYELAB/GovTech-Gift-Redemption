@@ -13,7 +13,6 @@ function checkAuthHeader(authHeader : String, res : Response) {
     return authHeader.split(" ")[1];
 }
 
-
 exports.getTeamName = async (req : Request, res : Response, pool : typeof Pool) => {
     const authHeader = req.headers.authorization as string;
     const token = checkAuthHeader(authHeader, res);
@@ -36,3 +35,41 @@ exports.getTeamName = async (req : Request, res : Response, pool : typeof Pool) 
         res.json("Not authenticated");
     }
 };
+/*
+exports.joinTeamName = async (req : Request, res : Response, pool : typeof Pool) => {
+    
+
+    const authHeader = req.headers.authorization as string;
+    const token = checkAuthHeader(authHeader, res);
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET, {
+            algorithms: ["HS256"],
+        });
+
+        // Check if the user already have a team first
+        
+        const queryCurrTeam = await pool.query();
+
+        res.json(`Successfully join new team: ${req.body.team_name}`);
+    } catch (err) {
+        res.json("Teamname already exist or Server Error");
+    }
+}
+*/
+
+exports.addTeamName = async (req : Request, res : Response, pool : typeof Pool) => {
+    const authHeader = req.headers.authorization as string;
+    const token = checkAuthHeader(authHeader, res);
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET, {
+            algorithms: ["HS256"],
+        });
+
+        await pool.query('INSERT INTO teams (team_name) VALUES ($1)', [req.body.team_name]);
+        res.json(`Successfully added new team: ${req.body.team_name}`);
+    } catch (err) {
+        res.json("Teamname already exist or Server Error");
+    }
+}
