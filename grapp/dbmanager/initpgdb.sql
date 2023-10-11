@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS Users (
 );
 
 CREATE TABLE IF NOT EXISTS Teams (
-    team_name VARCHAR(255) PRIMARY KEY
+    team_name VARCHAR(255) PRIMARY KEY,
     created_at TIMESTAMP DEFAULT NOW()
 );
 
