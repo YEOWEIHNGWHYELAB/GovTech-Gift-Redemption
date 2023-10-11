@@ -26,7 +26,7 @@ exports.getTeamName = async (req : Request, res : Response, pool : typeof Pool) 
             `SELECT team_name, created_at
             FROM Mapping
             WHERE staff_pass_id = $1`,
-            [decoded.username.username]
+            [decoded.username]
         );
 
         res.json(queryResult.rows[0]);
@@ -51,15 +51,16 @@ exports.joinTeamName = async (req : Request, res : Response, pool : typeof Pool)
             `SELECT team_name, created_at 
             FROM Mapping
             WHERE staff_pass_id = $1`
-            , [decoded.username.username]);
+            , [decoded.username]);
 
         if (queryCurrTeam.rows.length == 0) {
-            await pool.query('INSERT INTO Mapping (staff_pass_id, team_name, created_at) VALUES ($1, $2, NOW())', [decoded.username.username, req.body.team_name]);
+            await pool.query('INSERT INTO Mapping (staff_pass_id, team_name, created_at) VALUES ($1, $2, NOW())', [decoded.username, req.body.team_name]);
             res.json(`Successfully join new team: ${req.body.team_name}`);
         } else {
-            res.json("You are already on a team, please contact your admin in order leave your team first")
+            res.json("You are already on a team or you have already joined this team, please contact your admin in order leave your team first")
         }
     } catch (err) {
+        // console.log(err);
         res.json("Teamname does not exist or Server Error");
     }
 }

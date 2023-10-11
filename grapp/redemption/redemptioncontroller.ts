@@ -45,7 +45,7 @@ exports.verifyRedemption = async (req : Request, res : Response, pool : typeof P
             algorithms: ["HS256"],
         });
         
-        const teamname = await getTeamName(pool, decoded.username.username);
+        const teamname = await getTeamName(pool, decoded.username);
         const queryResult = await checkRedemptionValidity(pool, teamname);
 
         res.json({
@@ -66,7 +66,7 @@ exports.tryRedeem = async (req : Request, res : Response, pool : typeof Pool) =>
             algorithms: ["HS256"],
         });
 
-        const teamname = await getTeamName(pool, decoded.username.username);
+        const teamname = await getTeamName(pool, decoded.username);
         const queryResult = await checkRedemptionValidity(pool, teamname);
 
         if (queryResult.rows.length == 0) {
