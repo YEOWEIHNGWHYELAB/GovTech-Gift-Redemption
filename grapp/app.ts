@@ -14,16 +14,14 @@ const pool = new Pool({
 });
 
 const app: Application = express();
+app.use(express.json());
+const cors = require('cors');
+app.use(cors());
+
 const port = process.env.WEBPORT;
 
-/*
 const authRouter = require('./auth/routes')(pool);
 app.use('/auth', authRouter);
-*/
-
-app.get('/login', (req: Request, res: Response) => {
-    res.send('Hello, World!');
-});
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
