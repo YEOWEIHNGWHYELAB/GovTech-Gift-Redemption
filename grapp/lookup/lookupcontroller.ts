@@ -35,10 +35,8 @@ exports.getTeamName = async (req : Request, res : Response, pool : typeof Pool) 
         res.json("Not authenticated");
     }
 };
-/*
-exports.joinTeamName = async (req : Request, res : Response, pool : typeof Pool) => {
-    
 
+exports.joinTeamName = async (req : Request, res : Response, pool : typeof Pool) => {
     const authHeader = req.headers.authorization as string;
     const token = checkAuthHeader(authHeader, res);
 
@@ -49,14 +47,22 @@ exports.joinTeamName = async (req : Request, res : Response, pool : typeof Pool)
 
         // Check if the user already have a team first
         
-        const queryCurrTeam = await pool.query();
+        const queryCurrTeam = await pool.query(
+            `SELECT team_name, created_at 
+            FROM Mapping
+            WHERE staff_pass_id = $1`
+            , [decoded.username.username]);
 
-        res.json(`Successfully join new team: ${req.body.team_name}`);
+        if (queryCurrTeam.rows.length == 0) {
+            await pool.query('INSERT INTO Mapping (staff_pass_id, team_name, created_at) VALUES ($1, $2, NOW())', [decoded.username.username, req.body.team_name]);
+            res.json(`Successfully join new team: ${req.body.team_name}`);
+        } else {
+            res.json("You are already on a team, please contact your admin in order leave your team first")
+        }
     } catch (err) {
-        res.json("Teamname already exist or Server Error");
+        res.json("Teamname does not exist or Server Error");
     }
 }
-*/
 
 exports.addTeamName = async (req : Request, res : Response, pool : typeof Pool) => {
     const authHeader = req.headers.authorization as string;

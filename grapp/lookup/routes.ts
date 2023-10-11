@@ -13,5 +13,9 @@ module.exports = (pool: typeof Pool) => {
         lookupController.addTeamName(req, res, pool);
     });
 
+    router.post('/jointeamname', (req: Request, res: Response) => {
+        lookupController.joinTeamName(req, res, pool);
+    });
+
     return router;
 };
