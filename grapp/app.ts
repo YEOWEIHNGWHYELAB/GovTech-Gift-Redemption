@@ -1,4 +1,3 @@
-// app.ts
 import express, { Application } from 'express';
 
 const dotenv = require("dotenv");

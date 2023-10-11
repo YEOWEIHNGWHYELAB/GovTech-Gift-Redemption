@@ -27,7 +27,7 @@ exports.getTeamName = async (req : Request, res : Response, pool : typeof Pool) 
             `SELECT team_name, created_at
             FROM Mapping
             WHERE staff_pass_id = $1`,
-            [decoded.username]
+            [decoded.username.username]
         );
 
         res.json(queryResult.rows[0]);

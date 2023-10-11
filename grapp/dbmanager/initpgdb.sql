@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS Mapping (
 );
 
 CREATE TABLE IF NOT EXISTS Redemption (
-    team_name VARCHAR(255) REFERENCES Teams(team_name) NOT NULL,
+    team_name VARCHAR(255) REFERENCES Teams(team_name) PRIMARY KEY,
     redeemed_at TIMESTAMP NOT NULL
+    -- redemption_count INT NOT NULL
 );

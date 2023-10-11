@@ -27,9 +27,9 @@ async function generateToken(user : String, res : Response, isRegister = false) 
             // Login
             res.json({ message: 'Login successfully', token: token });
         }
-        
     } catch (err) {
-        console.error(err);
+        // console.error(err);
+        res.json("Fail to genereate token");
     }
 }
 
