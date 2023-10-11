@@ -8,7 +8,7 @@ exports.register = async (req : Request, res : Response, pool : typeof Pool) => 
     const { username, password } = req.body;
 
     if (!username || !password) {
-        return res.status(400).json({ message: 'Username and password are required' });
+        return res.json("Username and password are required");
     }
 
     try {
@@ -17,7 +17,7 @@ exports.register = async (req : Request, res : Response, pool : typeof Pool) => 
         const user = queryResult.rows[0];
 
         if (user) {
-            return res.status(409).json({ message: 'Username already taken' });
+            return res.json("Username already taken");
         }
 
         // Hash password
@@ -30,7 +30,8 @@ exports.register = async (req : Request, res : Response, pool : typeof Pool) => 
         // Sign JWT token
         jwtManager.generateToken(newUser.username, res, true);
     } catch (err) {
-        console.error(err);
+        // console.error(err);
+        res.json("Registration Error");
     }
 };
 
@@ -39,7 +40,7 @@ exports.login = async (req : Request, res : Response, pool : typeof Pool) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-        return res.status(400).json({ success: false, message: 'Username and password are required' });
+        return res.json("Username and password are required");
     }
 
     try {
@@ -48,19 +49,20 @@ exports.login = async (req : Request, res : Response, pool : typeof Pool) => {
         const user = queryResult.rows[0];
 
         if (!user) {
-            return res.status(401).json({ success: false, message: 'Invalid username or password' });
+            return res.json("Invalid username or password");
         }
 
         // Check if password is correct
         const passwordMatch = await bcrypt.compare(password, user.password);
 
         if (!passwordMatch) {
-            return res.status(401).json({ success: false, message: 'Invalid username or password' });
+            return res.json("Invalid username or password");
         }
 
         // Sign JWT token
         jwtManager.generateToken(user, res, false);
     } catch (err) {
-        console.error(err);
+        // console.error(err);
+        res.json("Login Error");
     }
 };

@@ -1,5 +1,5 @@
 // app.ts
-import express, { Application, Request, Response } from 'express';
+import express, { Application } from 'express';
 
 const dotenv = require("dotenv");
 dotenv.config();
@@ -22,6 +22,12 @@ const port = process.env.WEBPORT;
 
 const authRouter = require('./auth/routes')(pool);
 app.use('/auth', authRouter);
+
+const lookupRouter = require('./lookup/routes')(pool);
+app.use('/lookup', lookupRouter);
+
+const redemptionRouter = require('./redemption/routes')(pool);
+app.use('/redemption', redemptionRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
