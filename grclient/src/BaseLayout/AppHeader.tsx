@@ -223,10 +223,10 @@ export function AppHeader({ mobileOpen, setMobileOpen } : { mobileOpen : any, se
         <AppBar
             position="fixed"
             sx={{
-                width: (theme) => ({
-                    md: `calc(100% - ${drawerWidth}px)`,
+                width: () => ({
+                    md: `100%`,
                 }),
-                ml: (theme) => ({
+                ml: () => ({
                     md: `${drawerWidth}px`,
                 }),
                 zIndex: (theme) => theme.zIndex.drawer + 1,
