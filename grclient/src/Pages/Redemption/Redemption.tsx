@@ -1,23 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button as MUIButton } from "@mui/material";
 import RequestGift from "../../Hooks/RequestGift";
 
 const GiftRedemptionPage: React.FC = () => {
-    const { canRedeem, redeemGiftMtd, checkGiftRedemption, error } =
+    const { redeemGiftMtd, checkGiftRedemption } =
         RequestGift({
             resourceLabel: "Gift",
         });
-
-    const redeemGift = () => {
-            if (canRedeem) {
-            // You can add your redemption logic here.
-            // For this example, we'll just show an alert.
-            alert('Gift redeemed successfully!');
-            } else {
-            alert('You cannot redeem the gift at this time.');
-            }
-    };
-
+    
     return (
         <div>
             <h1>Gift Redemption</h1>
@@ -33,10 +23,32 @@ const GiftRedemptionPage: React.FC = () => {
                         boxSizing: "border-box",
                     }}
                     onClick={() => {
-                        checkGiftRedemption(() => {});
+                        checkGiftRedemption();
                     }}
                 >
                     CHECK FOR GIFT REDEMPTION
+                </MUIButton>
+            </div>
+
+            <br/>
+            <br/>
+            <br/>
+
+            <div>
+                <MUIButton
+                    style={{
+                        border: "2px solid #00ff00",
+                        margin: "2px",
+                        borderRadius: "4px",
+                        padding: "8px",
+                        width: "25%",
+                        boxSizing: "border-box",
+                    }}
+                    onClick={() => {
+                        redeemGiftMtd();
+                    }}
+                >
+                    EXCCUTE REDEMPTION
                 </MUIButton>
             </div>
         </div>

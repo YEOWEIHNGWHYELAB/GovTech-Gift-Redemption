@@ -60,7 +60,7 @@ exports.tryRedeem = async (req : Request, res : Response, pool : typeof Pool) =>
     const authHeader = req.headers.authorization as string;
     const token = jwtManager.checkAuthHeader(authHeader, res);
 
-    if (token) {
+    if (token != "") {
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET, {
                 algorithms: ["HS256"],

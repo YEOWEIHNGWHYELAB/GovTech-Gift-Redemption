@@ -23,7 +23,7 @@ export default function RequestGift({ resourceLabel } : { resourceLabel : any })
     }, [enqueueSnackbar, setError, setLoading]);
 
     // Callback lets us recreate function when dependencies created 
-    const checkGiftRedemption = useCallback((successCallback : any) => {
+    const checkGiftRedemption = useCallback(() => {
         setLoading(true);
 
         axios.get(`/redemption/verify`, SetHeaderToken())
@@ -42,16 +42,23 @@ export default function RequestGift({ resourceLabel } : { resourceLabel : any })
             }).catch(handleRequestResourceError);
     }, [handleRequestResourceError, setLoading]);
 
-    const redeemGiftMtd = useCallback((singleForm : any, successCallback : any) => {
+    const redeemGiftMtd = useCallback(() => {
         setLoading(true);
 
-        axios.post(`/redemption/redeem`, singleForm, SetHeaderToken())
-            .then(() => {
+        axios.post(`/redemption/redeem`, {}, SetHeaderToken())
+            .then((res) => {
                 setLoading(false);
-                enqueueSnackbar(`${resourceLabel} claimed`);
-                if (successCallback) {
-                    successCallback();
+
+                if (res.data) {
+                    alert(res.data);
+
+                    if (res.data === "Your team have already redeemed") {
+                        enqueueSnackbar(`${resourceLabel} already claimed`);
+                    } else {
+                        enqueueSnackbar(`${resourceLabel} claimed`);
+                    }
                 }
+                
             }).catch(handleRequestResourceError);
     }, [enqueueSnackbar, resourceLabel, handleRequestResourceError, setLoading]);
 
