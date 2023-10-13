@@ -2,12 +2,10 @@ import express, { Request, Response } from 'express';
 const { Pool } = require('pg');
 const jwt = require("jsonwebtoken");
 
-// Check if the auth header exist from DCS
-function checkAuthHeader(authHeader : String, res : Response) {
-    if (!authHeader) {
-        return res
-            .status(401)
-            .json({ message: "Authorization header missing" });
+// Check if the auth header exist
+export function checkAuthHeader(authHeader : String, res : Response) {
+    if (!authHeader.startsWith("Bearer ")) {
+        return res.json("Authorization header missing");
     }
 
     return authHeader.split(" ")[1];
