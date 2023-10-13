@@ -11,6 +11,10 @@ export async function getTeamName(pool: typeof Pool, username : String) {
         [username]
     );
 
+    if (queryTeamNameResult.rows.length == 0) {
+        return "";
+    }
+
     const teamname = queryTeamNameResult.rows[0].team_name as String;
     return teamname;
 }
@@ -37,14 +41,17 @@ exports.verifyRedemption = async (req : Request, res : Response, pool : typeof P
             });
             
             const teamname = await getTeamName(pool, decoded.username);
+            
+            if (teamname == "") {
+                return res.json({ "can_redeem": false });
+            }
+
             const queryResult = await checkRedemptionValidity(pool, teamname);
     
-            res.json({
-                "can_redeem": (queryResult.rows.length == 0)
-            });
+            return res.json({ "can_redeem": (queryResult.rows.length == 0) });
         } catch (err) {
-            // console.error(err);
-            res.json("Not authenticated");
+            console.error(err);
+            res.status(400).json("Not authenticated");
         }
     }
 };
@@ -70,7 +77,7 @@ exports.tryRedeem = async (req : Request, res : Response, pool : typeof Pool) =>
             }
         } catch (err) {
             // console.log(err);
-            res.json("Unable to redeem");
+            res.status(400).json("Unable to redeem");
         }
     }
 };
