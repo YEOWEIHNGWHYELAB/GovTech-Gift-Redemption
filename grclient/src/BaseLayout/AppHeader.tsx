@@ -150,18 +150,6 @@ export function AppHeader({ mobileOpen, setMobileOpen } : { mobileOpen : any, se
                         width: "100%"
                     }}
                 />
-
-                <TextField
-                    id="email"
-                    variant="outlined"
-                    label="Email"
-                    value={user ? user.email : ""}
-                    disabled
-                    sx={{
-                        mb: 3,
-                        width: "100%"
-                    }}
-                />
             </Box>
         </Modal>
     );
