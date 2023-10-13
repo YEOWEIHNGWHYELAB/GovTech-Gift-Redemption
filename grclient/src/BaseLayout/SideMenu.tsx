@@ -1,0 +1,222 @@
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { NavLink, useNavigate } from "react-router-dom";
+
+import Drawer from "@mui/material/Drawer";
+import Toolbar from "@mui/material/Toolbar";
+import List from "@mui/material/List";
+import Divider from "@mui/material/Divider";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import YouTubeIcon from "@mui/icons-material/YouTube";
+import SpeedIcon from "@mui/icons-material/Speed";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import Collapse from "@mui/material/Collapse";
+import GoogleIcon from '@mui/icons-material/Google';
+import KeyIcon from '@mui/icons-material/Key';
+import PieChartIcon from '@mui/icons-material/PieChart';
+import NetworkCheckIcon from '@mui/icons-material/NetworkCheck';
+import ArticleIcon from '@mui/icons-material/Article';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import CloudIcon from '@mui/icons-material/Cloud';
+import FolderOpenIcon from '@mui/icons-material/FolderOpen';
+
+import { Box } from "@mui/system";
+import { GlobalStyles, useTheme } from "@mui/material";
+
+const drawerWidth = 300;
+
+const listItems = [
+    {
+        key: "dashboard",
+        to: "/dash",
+        name: "Dashboard",
+        icon: <SpeedIcon />,
+        children: [
+            { name: "Ping Stat", icon: <NetworkCheckIcon />, to: "/dash/pingstat"},
+            { name: "File Stat", icon: <PieChartIcon />, to: "/dash/filestat" },
+        ],
+    },
+    {
+        key: "smco",
+        name: "SMCOverlord",
+        icon: <CloudIcon />,
+        children: [
+            { name: "SMCO Files", icon: <FolderOpenIcon />, to: "/smco"},
+        ]
+    },
+    {
+        key: "github",
+        name: "GitHub",
+        icon: <GitHubIcon />,
+        children: [
+            { name: "Credentials Table", icon: <KeyIcon />, to: "/github/credential" },
+            { name: "My Files", icon: <ArticleIcon />, to: "/github/files" },
+            { name: "Recycle Bin", icon: <DeleteOutlineIcon />, to: "/github/delfiles" },
+        ],
+    },
+    {
+        key: "google",
+        name: "Google",
+        icon: <GoogleIcon />,
+        children: [
+            { name: "YT Credentials Table", icon: <KeyIcon />, to: "/google/credentialyt" },
+            { name: "My Videos", icon: <YouTubeIcon />, to: "/google/ytvideos" },
+            { name: "YT Recycle Bin", icon: <DeleteOutlineIcon />, to: "/google/ytdelfiles" },
+        ],
+    }
+];
+
+const SidebarGlobalStyles = () => {
+    const theme = useTheme();
+
+    return (
+        <GlobalStyles
+            styles={{
+                ".sidebar-nav-item": {
+                    color: "unset",
+                    textDecoration: "none",
+                },
+                ".sidebar-nav-item-active": {
+                    textDecoration: "none",
+                    color: theme.palette.primary.main,
+                    "& .MuiSvgIcon-root": {
+                        color: theme.palette.primary.main,
+                    },
+                    "& .MuiTypography-root": {
+                        fontWeight: 500,
+                        color: theme.palette.primary.main,
+                    },
+                },
+            }}
+        />
+    );
+};
+
+const SidebarGlobalStylesMemo = React.memo(SidebarGlobalStyles);
+
+const NestedListItem = ({ li } : { li: any }) => {
+    const [open, setOpen] = useState(false);
+    const navigate = useNavigate();
+
+    const handleItemClick = () => {
+        navigate(li.to);
+    };
+
+    const handleDropdownClick = (event : any) => {
+        event.stopPropagation();
+        setOpen(!open);
+    };
+
+    return (
+        <>
+            <ListItem onClick={handleItemClick} >
+                <ListItemIcon>{li.icon}</ListItemIcon>
+                <ListItemText primary={li.name} />
+                {open ? (
+                    <ExpandLess onClick={handleDropdownClick} />
+                ) : (
+                    <ExpandMore onClick={handleDropdownClick} />
+                )}
+            </ListItem>
+
+            <Collapse in={open} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                    {li.children.map((child : any) => (
+                        <NavLink
+                            end={li.to === "/" ? true : false}
+                            className={(props) => {
+                                return `${
+                                    props.isActive
+                                        ? "sidebar-nav-item-active"
+                                        : "sidebar-nav-item"
+                                }`;
+                            }}
+                            to={child.to}
+                            key={child.name}
+                        >
+                            <ListItem 
+                                key={child.name}
+                                style={{ paddingLeft: 32, paddingRight: 16, borderLeft: '3px solid transparent' }}>
+                                <ListItemIcon>{child.icon}</ListItemIcon>
+                                <ListItemText primary={child.name} />
+                            </ListItem>
+                        </NavLink>
+                    ))}
+                </List>
+            </Collapse>
+        </>
+    );
+};
+
+export function SideMenu(props : any) {
+    const { mobileOpen, setMobileOpen } = props;
+
+    const handleDrawerToggle = () => {
+        setMobileOpen(!mobileOpen);
+    };
+
+    const drawer = (
+        <Box>
+            <Toolbar />
+            <Divider />
+            <List>
+                {listItems.map((li) => {
+                    return (
+                        <NestedListItem key={li.name} li={li} />
+                    );
+                })}
+            </List>
+        </Box>
+    );
+
+    return (
+        <Box
+            component="nav"
+            sx={{ width: { md: drawerWidth }, flexShrink: { sm: 0 } }}
+        >
+            <SidebarGlobalStylesMemo />
+
+            <Drawer
+                variant="temporary"
+                open={mobileOpen}
+                onClose={handleDrawerToggle}
+                ModalProps={{
+                    keepMounted: true, // Better open performance on mobile.
+                }}
+                sx={{
+                    display: { xs: "block", sm: "block", md: "none" },
+                    "& .MuiDrawer-paper": {
+                        boxSizing: "border-box",
+                        width: drawerWidth,
+                    },
+                }}
+            >
+                {drawer}
+            </Drawer>
+            <Drawer
+                variant="permanent"
+                sx={{
+                    display: { xs: "none", sm: "none", md: "block" },
+                    "& .MuiDrawer-paper": {
+                        boxSizing: "border-box",
+                        width: drawerWidth,
+                    },
+                }}
+                open
+            >
+                {drawer}
+            </Drawer>
+        </Box>
+    );
+}
+
+SideMenu.propTypes = {
+    mobileOpen: PropTypes.bool,
+    setMobileOpen: PropTypes.func.isRequired,
+};
+
+export default SideMenu;
