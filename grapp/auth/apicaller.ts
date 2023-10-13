@@ -60,7 +60,7 @@ exports.login = async (req : Request, res : Response, pool : typeof Pool) => {
         }
 
         // Sign JWT token
-        jwtManager.generateToken(user, res, false);
+        jwtManager.generateToken(user.username, res, false);
     } catch (err) {
         // console.error(err);
         res.json("Login Error");

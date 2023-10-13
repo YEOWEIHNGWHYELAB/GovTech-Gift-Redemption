@@ -65,10 +65,6 @@ exports.addTeamName = async (req : Request, res : Response, pool : typeof Pool) 
 
     if (token) {
         try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET, {
-                algorithms: ["HS256"],
-            });
-    
             await pool.query('INSERT INTO teams (team_name) VALUES ($1)', [req.body.team_name]);
             res.json(`Successfully added new team: ${req.body.team_name}`);
         } catch (err) {
