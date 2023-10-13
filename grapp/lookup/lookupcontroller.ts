@@ -23,7 +23,7 @@ exports.getTeamName = async (req : Request, res : Response, pool : typeof Pool) 
             res.json(queryResult.rows[0]);
         } catch (err) {
             // console.error(err);
-            res.json("Not authenticated");
+            res.status(400).json("Not authenticated");
         }
     }
 };
@@ -54,7 +54,7 @@ exports.joinTeamName = async (req : Request, res : Response, pool : typeof Pool)
             }
         } catch (err) {
             // console.log(err);
-            res.json("Teamname does not exist or Server Error");
+            res.status(400).json("Teamname does not exist or Server Error");
         }
     }
 }
@@ -70,5 +70,7 @@ exports.addTeamName = async (req : Request, res : Response, pool : typeof Pool) 
         } catch (err) {
             res.json("Teamname already exist or Server Error");
         }
+    } else {
+        res.status(400).json("Please login again!");
     }
 }
