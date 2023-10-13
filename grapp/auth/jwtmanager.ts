@@ -35,8 +35,12 @@ async function generateToken(user : String, res : Response, isRegister = false) 
 
 // Check if the auth header exist
 export function checkAuthHeader(authHeader : String, res : Response) {
+    if (!authHeader) {
+        return "";
+    }
+
     if (!authHeader.startsWith("Bearer ")) {
-        return res.json("Authorization header missing");
+        return "";
     }
 
     return authHeader.split(" ")[1];
