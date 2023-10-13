@@ -13,7 +13,7 @@ function checkAuthHeader(authHeader : String, res : Response) {
     return authHeader.split(" ")[1];
 }
 
-async function getTeamName(pool: any, username : String) {
+async function getTeamName(pool: typeof Pool, username : String) {
     const queryTeamNameResult = await pool.query(
         `SELECT team_name, created_at
             FROM Mapping
@@ -25,7 +25,7 @@ async function getTeamName(pool: any, username : String) {
     return teamname;
 }
 
-async function checkRedemptionValidity(pool: any, teamname : String) {
+export async function checkRedemptionValidity(pool: typeof Pool, teamname : String) {
     const queryResult = await pool.query(
         `SELECT team_name, redeemed_at
             FROM Redemption
