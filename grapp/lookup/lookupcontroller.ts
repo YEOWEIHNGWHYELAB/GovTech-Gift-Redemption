@@ -3,6 +3,36 @@ const jwtManager = require("../auth/jwtmanager");
 const { Pool } = require('pg');
 const jwt = require("jsonwebtoken");
 
+exports.getAllTeam = async (req : Request, res : Response, pool : typeof Pool) => {
+    const authHeader = req.headers.authorization as string;
+    const token = jwtManager.checkAuthHeader(authHeader, res);
+
+    if (token) {
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET, {
+                algorithms: ["HS256"],
+            });
+    
+            const queryResult = await pool.query(
+                `SELECT team_name
+                FROM Teams
+                `, []
+            );
+
+            let teamArr = []
+            
+            for (let currName of queryResult.rows) {
+                teamArr.push(currName.team_name);
+            }
+    
+            res.json(teamArr);
+        } catch (err) {
+            // console.error(err);
+            res.status(400).json("Not authenticated");
+        }
+    }
+}; 
+
 exports.getTeamName = async (req : Request, res : Response, pool : typeof Pool) => {
     const authHeader = req.headers.authorization as string;
     const token = jwtManager.checkAuthHeader(authHeader, res);
