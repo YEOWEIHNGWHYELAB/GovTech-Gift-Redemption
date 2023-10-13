@@ -1,19 +1,9 @@
 import express, { Request, Response } from 'express';
+const jwtManager = require("../auth/jwtmanager");
 const { Pool } = require('pg');
 const jwt = require("jsonwebtoken");
 
-// Check if the auth header exist from DCS
-function checkAuthHeader(authHeader : String, res : Response) {
-    if (!authHeader) {
-        return res
-            .status(401)
-            .json({ message: "Authorization header missing" });
-    }
-
-    return authHeader.split(" ")[1];
-}
-
-async function getTeamName(pool: typeof Pool, username : String) {
+export async function getTeamName(pool: typeof Pool, username : String) {
     const queryTeamNameResult = await pool.query(
         `SELECT team_name, created_at
             FROM Mapping
@@ -38,45 +28,49 @@ export async function checkRedemptionValidity(pool: typeof Pool, teamname : Stri
 
 exports.verifyRedemption = async (req : Request, res : Response, pool : typeof Pool) => {
     const authHeader = req.headers.authorization as string;
-    const token = checkAuthHeader(authHeader, res);
+    const token = jwtManager.checkAuthHeader(authHeader, res);
 
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET, {
-            algorithms: ["HS256"],
-        });
-        
-        const teamname = await getTeamName(pool, decoded.username);
-        const queryResult = await checkRedemptionValidity(pool, teamname);
-
-        res.json({
-            "can_redeem": (queryResult.rows.length == 0)
-        });
-    } catch (err) {
-        // console.error(err);
-        res.json("Not authenticated");
+    if (token) {
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET, {
+                algorithms: ["HS256"],
+            });
+            
+            const teamname = await getTeamName(pool, decoded.username);
+            const queryResult = await checkRedemptionValidity(pool, teamname);
+    
+            res.json({
+                "can_redeem": (queryResult.rows.length == 0)
+            });
+        } catch (err) {
+            // console.error(err);
+            res.json("Not authenticated");
+        }
     }
 };
 
 exports.tryRedeem = async (req : Request, res : Response, pool : typeof Pool) => {
     const authHeader = req.headers.authorization as string;
-    const token = checkAuthHeader(authHeader, res);
+    const token = jwtManager.checkAuthHeader(authHeader, res);
 
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET, {
-            algorithms: ["HS256"],
-        });
-
-        const teamname = await getTeamName(pool, decoded.username);
-        const queryResult = await checkRedemptionValidity(pool, teamname);
-
-        if (queryResult.rows.length == 0) {
-            await pool.query('INSERT INTO redemption (team_name, redeemed_at) VALUES ($1, now())', [teamname]);
-            res.json("Successfully redeemed");
-        } else {
-            res.json("Your team have already redeemed");
+    if (token) {
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET, {
+                algorithms: ["HS256"],
+            });
+    
+            const teamname = await getTeamName(pool, decoded.username);
+            const queryResult = await checkRedemptionValidity(pool, teamname);
+    
+            if (queryResult.rows.length == 0) {
+                await pool.query('INSERT INTO redemption (team_name, redeemed_at) VALUES ($1, now())', [teamname]);
+                res.json("Successfully redeemed");
+            } else {
+                res.json("Your team have already redeemed");
+            }
+        } catch (err) {
+            // console.log(err);
+            res.json("Unable to redeem");
         }
-    } catch (err) {
-        // console.log(err);
-        res.json("Unable to redeem");
     }
 };

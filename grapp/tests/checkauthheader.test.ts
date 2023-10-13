@@ -1,4 +1,4 @@
-import { checkAuthHeader } from '../lookup/lookupcontroller';
+import { checkAuthHeader } from '../auth/jwtmanager';
 
 describe('checkAuthHeader', () => {
     it('should return the second part of the auth header if it exists', () => {

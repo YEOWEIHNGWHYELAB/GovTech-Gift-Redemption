@@ -30,6 +30,10 @@ This app can be used through API calls.
 
 Have a look at the [postman-api-example.json](/grapp/postman-api-example.json) file for a sample of the API calls that can be used with Postman API Platform.
 
+## Test
+
+Run the following command: `npm test`
+
 ## Assumption Made
 
 1) When someone belonging to a team redeems a gift leaves this team and goes to another team, the gift stays in the original team.
