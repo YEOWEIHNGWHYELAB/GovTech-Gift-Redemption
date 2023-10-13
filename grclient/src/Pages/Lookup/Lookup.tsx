@@ -1,11 +1,43 @@
-import React from 'react';
+import React, {useState} from 'react';
 
-const HelloWorld: React.FC = () => {
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import RequestLookup from "../../Hooks/RequestLookup";
+
+const Lookup: React.FC = () => {
+    const { resourceList, lookupTeams, addTeam, joinTeam, error } =
+        RequestLookup({
+            resourceLabel: "Teams",
+        });
+    
+    const [inputValue, setInputValue] = useState<string>('');
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setInputValue(event.target.value);
+    };
+      
+    const handleSubmit = () => {
+        console.log('Submitted value:', inputValue);
+    };
+      
     return (
         <div>
-            <h1>Hello, World!</h1>
+            <TextField
+                label="Enter a string"
+                variant="outlined"
+                fullWidth
+                value={inputValue}
+                onChange={handleInputChange}
+            />
+
+            <br/>
+            <br/>
+
+            <Button variant="contained" color="primary" onClick={handleSubmit}>
+                Submit
+            </Button>
         </div>
     );
 };
 
-export default HelloWorld;
+export default Lookup;
