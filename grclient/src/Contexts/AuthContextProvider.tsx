@@ -52,9 +52,6 @@ export default function AuthContextProvider({ children } : { children : any}) {
         }
     }, [user, isAuthenticated]);
 
-    // Do not include this in deployment!
-    // console.log(providerValue);
-
     return (
         <AuthContext.Provider value={providerValue}>
             {children}

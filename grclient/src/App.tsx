@@ -14,6 +14,8 @@ import BaseLayout from './BaseLayout';
 
 import Login from "./Pages/Auth/Login";
 import Register from "./Pages/Auth/Register";
+import Lookup from './Pages/Lookup/Lookup';
+import Redemption from './Pages/Redemption/Redemption';
 
 function App() {
     return (
@@ -30,6 +32,8 @@ function App() {
                                 <Route index element={<Navigate to="/auth/login" />} />
                                 <Route element={<RequireAuth />}>
                                     <Route element={<BaseLayout />}>
+                                        <Route path="/lookup" element={<Lookup />} />
+                                        <Route path="/redemption" element={<Redemption />} />
                                     </Route>
                                 </Route>
                                 <Route element={<RequireNotAuth />} >

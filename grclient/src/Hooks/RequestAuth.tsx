@@ -20,16 +20,6 @@ export default function useRequestAuth() {
         setLoading(false);
     }, [enqueueSnackbar, setLoading, setError]);
 
-    const resetPassword = useCallback((data : any) => {
-        setLoading(true);
-        
-        axios.post("/auth/resetpwd", data, SetHeaderToken())
-            .then(() => {
-                enqueueSnackbar("Successfully updated password");
-                setLoading(false);
-            }).catch(handleRequestError);
-    }, [enqueueSnackbar, handleRequestError]);
-
     const register = useCallback(({ username, email, password } : { username : any, email : any, password : any}, successCallback : any) => {
         setLoading(true);
 
@@ -57,47 +47,19 @@ export default function useRequestAuth() {
             .catch(handleRequestError);
     }, [handleRequestError, setLoading, setIsAuthenticated]);
 
-    const forgotPasswordKickStart = useCallback((values : any) => {
-        setLoading(true);
-
-        axios.post("/auth/forgotpwd", values)
-            .then((res) => {
-                setLoading(false);
-            })
-            .catch(handleRequestError);
-    }, [handleRequestError, setLoading, setIsAuthenticated]);
-
-    const forgotPasswordConfirmation = useCallback((values : any, successCallback  : any) => {
-        setLoading(true);
-
-        axios.post("/auth/confirmforgotpwd", values)
-            .then((res) => {
-                setLoading(false);
-
-                if (successCallback) {
-                    successCallback();
-                }
-            })
-            .catch(handleRequestError);
-    }, [handleRequestError, setLoading, setIsAuthenticated]);
-
-    // There is no communication with DB if you logout
     const logout = useCallback(() => {
         setLogoutPending(true);
         setIsAuthenticated(false);
         localStorage.removeItem("JWTToken");
         setLogoutPending(false);
-    }, [handleRequestError, setLogoutPending, setIsAuthenticated]);
+    }, [setLogoutPending, setIsAuthenticated]);
 
     return {
         register,
         login,
         logout,
-        forgotPasswordKickStart,
-        forgotPasswordConfirmation,
         logoutPending,
         loading,
-        error,
-        resetPassword
+        error
     };
 }

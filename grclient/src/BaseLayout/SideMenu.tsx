@@ -9,20 +9,13 @@ import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import YouTubeIcon from "@mui/icons-material/YouTube";
-import SpeedIcon from "@mui/icons-material/Speed";
-import GitHubIcon from "@mui/icons-material/GitHub";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import Collapse from "@mui/material/Collapse";
-import GoogleIcon from '@mui/icons-material/Google';
-import KeyIcon from '@mui/icons-material/Key';
-import PieChartIcon from '@mui/icons-material/PieChart';
-import NetworkCheckIcon from '@mui/icons-material/NetworkCheck';
-import ArticleIcon from '@mui/icons-material/Article';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import CloudIcon from '@mui/icons-material/Cloud';
-import FolderOpenIcon from '@mui/icons-material/FolderOpen';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import InfoIcon from '@mui/icons-material/Info';
+import SearchIcon from '@mui/icons-material/Search';
+import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 
 import { Box } from "@mui/system";
 import { GlobalStyles, useTheme } from "@mui/material";
@@ -31,42 +24,20 @@ const drawerWidth = 300;
 
 const listItems = [
     {
-        key: "dashboard",
-        to: "/dash",
-        name: "Dashboard",
-        icon: <SpeedIcon />,
+        key: "lookup",
+        name: "Info",
+        icon: <InfoIcon />,
         children: [
-            { name: "Ping Stat", icon: <NetworkCheckIcon />, to: "/dash/pingstat"},
-            { name: "File Stat", icon: <PieChartIcon />, to: "/dash/filestat" },
-        ],
-    },
-    {
-        key: "smco",
-        name: "SMCOverlord",
-        icon: <CloudIcon />,
-        children: [
-            { name: "SMCO Files", icon: <FolderOpenIcon />, to: "/smco"},
+            { name: "Lookup", icon: <SearchIcon />, to: "/lookup"},
         ]
     },
     {
-        key: "github",
-        name: "GitHub",
-        icon: <GitHubIcon />,
+        key: "gift",
+        name: "Gift",
+        icon: <HighlightOffIcon />,
         children: [
-            { name: "Credentials Table", icon: <KeyIcon />, to: "/github/credential" },
-            { name: "My Files", icon: <ArticleIcon />, to: "/github/files" },
-            { name: "Recycle Bin", icon: <DeleteOutlineIcon />, to: "/github/delfiles" },
-        ],
-    },
-    {
-        key: "google",
-        name: "Google",
-        icon: <GoogleIcon />,
-        children: [
-            { name: "YT Credentials Table", icon: <KeyIcon />, to: "/google/credentialyt" },
-            { name: "My Videos", icon: <YouTubeIcon />, to: "/google/ytvideos" },
-            { name: "YT Recycle Bin", icon: <DeleteOutlineIcon />, to: "/google/ytdelfiles" },
-        ],
+            { name: "Redeem", icon: <CardGiftcardIcon />, to: "/redemption"},
+        ]
     }
 ];
 

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 const { Pool } = require('pg');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const jwtManager = require('./jwtmanager');
 
 // Register user
@@ -66,3 +67,22 @@ exports.login = async (req : Request, res : Response, pool : typeof Pool) => {
         res.json("Login Error");
     }
 };
+
+// whoami
+exports.getUsername = async (req : Request, res : Response, pool : typeof Pool) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+        return res.json('Authorization header missing' );
+    }
+
+    const token = authHeader.split(' ')[1];
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET, { algorithms: ['HS256'], ignoreExpiration: false });
+
+        res.json({ username: decoded.username });
+    } catch (err) {
+        res.json("Please login again!");
+    }
+}

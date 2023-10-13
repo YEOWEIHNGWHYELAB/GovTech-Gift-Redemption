@@ -14,5 +14,10 @@ module.exports = (pool: typeof Pool) => {
         authController.login(req, res, pool);
     });
 
+    // whoami
+    router.get('/whoami', (req: Request, res: Response) => {
+        authController.getUsername(req, res, pool);
+    });
+
     return router;
 };

@@ -44,7 +44,7 @@ export function AppHeader({ mobileOpen, setMobileOpen } : { mobileOpen : any, se
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
     const [pwdModalIsOpen, setPwdModalIsOpen] = React.useState(false);
     const { user } : { user : any} = React.useContext(AuthContext);
-    const { logout, logoutPending, resetPassword } = RequestAuth();
+    const { logout, logoutPending } = RequestAuth();
     const [oldPassword, setOldPassword] = React.useState('');
     const [newPassword, setNewPassword] = React.useState('');
 
@@ -90,18 +90,6 @@ export function AppHeader({ mobileOpen, setMobileOpen } : { mobileOpen : any, se
         setNewPassword(event.target.value);
     }
 
-    const handleChangePassword = () => {
-        const pwdChange = {
-            old_password: oldPassword,
-            new_password: newPassword
-        };
-        
-        setOldPassword("");
-        setNewPassword("");
-
-        resetPassword(pwdChange);
-    }
-
     const pwdModal = (
         <Modal open={pwdModalIsOpen} onClose={handleClosePwdModal}>
             <Box sx={modalStyle}>
@@ -138,16 +126,6 @@ export function AppHeader({ mobileOpen, setMobileOpen } : { mobileOpen : any, se
                         width: "100%"
                     }}
                 />
-
-                <Button 
-                    onClick={handleChangePassword} 
-                    color="primary"
-                    style={{
-                        background: "grey"
-                    }}
-                >
-                    <Typography fontWeight={700}>Change Password</Typography>
-                </Button>
             </Box>
         </Modal>
     )
@@ -222,10 +200,6 @@ export function AppHeader({ mobileOpen, setMobileOpen } : { mobileOpen : any, se
             >
                 <MenuItem onClick={handleOpenModal}>
                     My Profile
-                </MenuItem>
-
-                <MenuItem onClick={handleOpenPwdModal}>
-                    Change Password
                 </MenuItem>
 
                 <MenuItem disabled={logoutPending} onClick={handleLogout}>
