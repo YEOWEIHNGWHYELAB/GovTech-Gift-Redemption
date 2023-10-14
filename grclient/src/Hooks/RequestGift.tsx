@@ -19,6 +19,7 @@ export default function RequestGift({ resourceLabel } : { resourceLabel : any })
         setError(formattedError);
         setLoading(false);
         enqueueSnackbar(formattedError);
+        localStorage.removeItem("JWTToken");
         window.location.href = '/auth/login';
     }, [enqueueSnackbar, setError, setLoading]);
 
