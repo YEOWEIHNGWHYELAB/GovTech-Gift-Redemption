@@ -6,14 +6,20 @@ import TextField from '@mui/material/TextField';
 import RequestLookup from "../../Hooks/RequestLookup";
 
 const Lookup: React.FC = () => {
-    const { resourceList, lookupTeams, addTeam, joinTeam, error } =
+    const { resourceList, myTeam, lookupMyTeam, lookupTeams, addTeam, joinTeam, error } =
         RequestLookup({
             resourceLabel: "Teams",
         });
 
+    const [selectedOption, setSelectedOption] = useState<string>("");
+
     useEffect(() => {
-        lookupTeams();
-    }, []);
+        lookupTeams(() => {
+            lookupMyTeam(() => {
+                setSelectedOption(myTeam);
+            });
+        });
+    }, [myTeam]);
     
     const [inputValue, setInputValue] = useState<string>('');
 
@@ -24,8 +30,6 @@ const Lookup: React.FC = () => {
     const handleSubmit = () => {
         addTeam(inputValue);
     };
-
-    const [selectedOption, setSelectedOption] = useState<string>('');
 
     const handleSelectChange = (event: SelectChangeEvent<string>) => {
         setSelectedOption(event.target.value as string);

@@ -11,6 +11,7 @@ export default function RequestLookup({ resourceLabel } : { resourceLabel : any 
         results: []
     });
     const [error, setError] = useState<any>(null);
+    const [myTeam, setMyTeam] = useState<string>("");
 
     const loadingOverlay = useContext(LoadingOverlayResourceContext);
     const { enqueueSnackbar } = useSnackbar();
@@ -25,7 +26,24 @@ export default function RequestLookup({ resourceLabel } : { resourceLabel : any 
         window.location.href = '/auth/login';
     }, [enqueueSnackbar, setError, setLoading]);
 
-    const lookupTeams = useCallback(() => {
+    const lookupMyTeam = useCallback((callback : any) => {
+        setLoading(true);
+
+        axios.get(`/lookup/teamname`, SetHeaderToken())
+            .then((res) => {
+                setLoading(false);
+
+                if (res.data) {
+                    setMyTeam(res.data.team_name);
+                }
+
+                if (callback) {
+                    callback();
+                }
+            }).catch(handleRequestResourceError);
+    }, [handleRequestResourceError, setLoading]);
+
+    const lookupTeams = useCallback((callback : any) => {
         setLoading(true);
 
         axios.get(`/lookup/teamnameall`, SetHeaderToken())
@@ -35,6 +53,10 @@ export default function RequestLookup({ resourceLabel } : { resourceLabel : any 
                 setResourceList({
                     results: res.data
                 });
+
+                if (callback) {
+                    callback();
+                }
             }).catch(handleRequestResourceError);
     }, [handleRequestResourceError, setLoading]);
 
@@ -82,6 +104,8 @@ export default function RequestLookup({ resourceLabel } : { resourceLabel : any 
 
     return {
         resourceList,
+        myTeam,
+        lookupMyTeam,
         lookupTeams,
         addTeam,
         joinTeam,
