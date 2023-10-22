@@ -19,8 +19,9 @@ const GiftRedemptionPage: React.FC = () => {
                         margin: "2px",
                         borderRadius: "4px",
                         padding: "8px",
-                        width: "25%",
+                        width: "100%",
                         boxSizing: "border-box",
+                        fontSize: "16px",
                     }}
                     onClick={() => {
                         checkGiftRedemption();
@@ -41,14 +42,15 @@ const GiftRedemptionPage: React.FC = () => {
                         margin: "2px",
                         borderRadius: "4px",
                         padding: "8px",
-                        width: "25%",
+                        width: "100%",
                         boxSizing: "border-box",
+                        fontSize: "16px",
                     }}
                     onClick={() => {
                         redeemGiftMtd();
                     }}
                 >
-                    EXCCUTE REDEMPTION
+                    EXECUTE REDEMPTION
                 </MUIButton>
             </div>
         </div>
