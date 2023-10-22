@@ -42,28 +42,16 @@ export function AppHeader({ mobileOpen, setMobileOpen } : { mobileOpen : any, se
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
-    const [pwdModalIsOpen, setPwdModalIsOpen] = React.useState(false);
     const { user } : { user : any} = React.useContext(AuthContext);
     const { logout, logoutPending } = RequestAuth();
-    const [oldPassword, setOldPassword] = React.useState('');
-    const [newPassword, setNewPassword] = React.useState('');
 
     const handleLogout = () => {
         logout();
     }
 
-    const handleOpenPwdModal = () => {
-        setPwdModalIsOpen(true);
-        setAnchorEl(null);
-    }
-
     const handleOpenModal = () => {
         setModalIsOpen(true);
         setAnchorEl(null);
-    }
-
-    const handleClosePwdModal = () => {
-        setPwdModalIsOpen(false);
     }
 
     const handleCloseModal = () => {
@@ -81,54 +69,6 @@ export function AppHeader({ mobileOpen, setMobileOpen } : { mobileOpen : any, se
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
-
-    const handleChangeOldPwd = (event : any) => {
-        setOldPassword(event.target.value);
-    };
-
-    const handleChangeNewPwd = (event : any) => {
-        setNewPassword(event.target.value);
-    }
-
-    const pwdModal = (
-        <Modal open={pwdModalIsOpen} onClose={handleClosePwdModal}>
-            <Box sx={modalStyle}>
-                <Typography variant="h6" component="h2" sx={{
-                    mb: 3
-                }}>
-                    Change Password
-                </Typography>
-
-                <TextField
-                    id="oldpassword"
-                    variant="outlined"
-                    label="Old Password"
-                    autoComplete="old-password"
-                    type="password"
-                    value={oldPassword}
-                    onChange={handleChangeOldPwd}
-                    sx={{
-                        mb: 3,
-                        width: "100%"
-                    }}
-                />
-
-                <TextField
-                    id="newpassword"
-                    variant="outlined"
-                    label="New Password"
-                    autoComplete="new-password"
-                    type="password"
-                    value={newPassword}
-                    onChange={handleChangeNewPwd}
-                    sx={{
-                        mb: 3,
-                        width: "100%"
-                    }}
-                />
-            </Box>
-        </Modal>
-    )
 
     const modal = (
         <Modal open={modalIsOpen} onClose={handleCloseModal}>
@@ -237,7 +177,6 @@ export function AppHeader({ mobileOpen, setMobileOpen } : { mobileOpen : any, se
                 {authLinks}
             </Toolbar>
             {modal}
-            {pwdModal}
         </AppBar>
     );
 }

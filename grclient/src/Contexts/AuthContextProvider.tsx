@@ -47,9 +47,7 @@ export default function AuthContextProvider({ children } : { children : any}) {
     }, [isAuthenticated, setIsAuthenticated, user, setUser]);
 
     useEffect(() => {
-        if (!user && (isAuthenticated === null || isAuthenticated === true)) {
-            loadAuthUser();
-        }
+        loadAuthUser();
     }, [user, isAuthenticated]);
 
     return (

@@ -64,7 +64,7 @@ exports.login = async (req : Request, res : Response, pool : typeof Pool) => {
         jwtManager.generateToken(user.username, res, false);
     } catch (err) {
         // console.error(err);
-        res.json("Login Error");
+        res.status(400).json("Login Error");
     }
 };
 
@@ -83,6 +83,6 @@ exports.getUsername = async (req : Request, res : Response, pool : typeof Pool) 
 
         res.json({ username: decoded.username });
     } catch (err) {
-        res.json("Please login again!");
+        res.status(400).json("Please login again!");
     }
 }
