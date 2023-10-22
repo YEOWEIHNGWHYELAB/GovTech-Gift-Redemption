@@ -18,7 +18,7 @@ exports.register = async (req : Request, res : Response, pool : typeof Pool) => 
         const user = queryResult.rows[0];
 
         if (user) {
-            return res.json("Username already taken");
+            return res.status(400).json("Username already taken");
         }
 
         // Hash password
@@ -32,7 +32,7 @@ exports.register = async (req : Request, res : Response, pool : typeof Pool) => 
         jwtManager.generateToken(newUser.username, res, true);
     } catch (err) {
         // console.error(err);
-        res.json("Registration Error");
+        res.status(400).json("Registration Error");
     }
 };
 
@@ -50,14 +50,14 @@ exports.login = async (req : Request, res : Response, pool : typeof Pool) => {
         const user = queryResult.rows[0];
 
         if (!user) {
-            return res.json("Invalid username or password");
+            return res.status(400).json("Invalid username or password");
         }
 
         // Check if password is correct
         const passwordMatch = await bcrypt.compare(password, user.password);
 
         if (!passwordMatch) {
-            return res.json("Invalid username or password");
+            return res.status(400).json("Invalid username or password");
         }
 
         // Sign JWT token
