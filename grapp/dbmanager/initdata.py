@@ -31,12 +31,9 @@ with open(csv_filename, 'r') as csv_file:
     for row in csv_reader:
         # Assuming the data you want to insert is in the B column (index 1)
         data_to_insert = row[1]
-        data_to_insert_user = row[0]
 
         # Insert data into the database table (change 'your_table' to your table name)
         insert_query = sql.SQL("INSERT INTO {} (team_name) VALUES (%s)").format(sql.Identifier('teams'))
-        insert_query_user = sql.SQL("INSERT INTO {} (username, password) VALUES (%s, %s)").format(sql.Identifier('users'))
-
 
         try:
             cursor.execute(insert_query, (data_to_insert,))
@@ -53,18 +50,29 @@ with open(csv_filename, 'r') as csv_file:
 
             # Roll back the current transaction
             conn.rollback()
+
+    # Commit changes and close the database connection
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+with open(csv_filename, 'r') as csv_file:
+    conn = psycopg2.connect(**db_params)
+    cursor = conn.cursor()
+
+    csv_reader = csv.reader(csv_file)
+
+    for row in csv_reader:
+        data_to_insert_user = row[0]
+
+        insert_query_user = sql.SQL("INSERT INTO {} (username, password) VALUES (%s, %s)").format(sql.Identifier('users'))
+
         try:
             cursor.execute(insert_query_user, (data_to_insert_user, "$2a$10$hJdHlR/ywaR0q./xj5Kofu.7Fwpt2cVi6CTBDj2DxLItmvR3gTI/G"))
-        except psycopg2.IntegrityError as e:
-            if e.pgcode == errorcodes.UNIQUE_VIOLATION:
-                print(f"Unique violation error for data: {data_to_insert_user}. Ignoring.")
-            else:
-                print(f"An integrity error occurred: {e}")
         except Exception as e:
             print(f"An error occurred: {e}")
             conn.rollback()
-    
-    # Commit changes and close the database connection
+
     conn.commit()
     cursor.close()
     conn.close()
