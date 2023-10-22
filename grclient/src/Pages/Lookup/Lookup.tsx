@@ -28,7 +28,11 @@ const Lookup: React.FC = () => {
     };
       
     const handleSubmit = () => {
-        addTeam(inputValue);
+        if (inputValue === "") {
+            alert("Teamname cannot be empty!")
+        } else {
+            addTeam(inputValue);
+        }
     };
 
     const handleSelectChange = (event: SelectChangeEvent<string>) => {
