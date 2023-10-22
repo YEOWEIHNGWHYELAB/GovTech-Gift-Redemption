@@ -50,7 +50,7 @@ exports.verifyRedemption = async (req : Request, res : Response, pool : typeof P
     
             return res.json({ "can_redeem": (queryResult.rows.length == 0) });
         } catch (err) {
-            console.error(err);
+            // console.error(err);
             res.status(400).json("Not authenticated");
         }
     }

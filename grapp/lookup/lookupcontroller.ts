@@ -95,11 +95,19 @@ exports.addTeamName = async (req : Request, res : Response, pool : typeof Pool) 
 
     if (token) {
         try {
-            await pool.query('INSERT INTO teams (team_name) VALUES ($1)', [req.body.team_name]);
-            res.json(`Successfully added new team: ${req.body.team_name}`);
-        } catch (err) {
-            res.json("Teamname already exist or Server Error");
-        }
+            const decoded = jwt.verify(token, process.env.JWT_SECRET, {
+                algorithms: ["HS256"],
+            });
+            
+            try {
+                await pool.query('INSERT INTO teams (team_name) VALUES ($1)', [req.body.team_name]);
+                res.json(`Successfully added new team: ${req.body.team_name}`);
+            } catch (err) {
+                res.json("Teamname already exist or Server Error");
+            }
+        } catch (jwtError) {
+            res.status(400).json("Please login again!");
+        } 
     } else {
         res.status(400).json("Please login again!");
     }
