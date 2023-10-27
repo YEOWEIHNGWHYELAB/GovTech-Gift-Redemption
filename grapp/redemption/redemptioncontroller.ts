@@ -69,9 +69,11 @@ exports.tryRedeem = async (req : Request, res : Response, pool : typeof Pool) =>
             const teamname = await getTeamName(pool, decoded.username);
             const queryResult = await checkRedemptionValidity(pool, teamname);
     
-            if (queryResult.rows.length == 0) {
+            if (queryResult.rows.length == 0 && teamname != "") {
                 await pool.query('INSERT INTO redemption (team_name, redeemed_at) VALUES ($1, now())', [teamname]);
                 res.json("Successfully redeemed");
+            } else if (teamname == "") {
+                res.json("Please join a team first!");
             } else {
                 res.json("Your team have already redeemed");
             }

@@ -55,6 +55,8 @@ export default function RequestGift({ resourceLabel } : { resourceLabel : any })
 
                     if (res.data === "Your team have already redeemed") {
                         enqueueSnackbar(`${resourceLabel} already claimed`);
+                    } else if (res.data === "Please join a team first!") {
+                        enqueueSnackbar(`${resourceLabel} not claimed, please join a team first!`);
                     } else {
                         enqueueSnackbar(`${resourceLabel} claimed`);
                     }
