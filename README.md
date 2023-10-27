@@ -91,3 +91,15 @@ Run the following command: `npm test`
 2) There will only be a gift throughout the entirety usage of the app for each team.
 
 3) The staff_pass_id is the same as the login username for each employee.
+
+## What to Improve
+
+1) Add more unit tests for the backend.
+
+2) Start doing unit test for frontend since currently there is no unit test for frontend.
+
+3) Write automation script for full end to end testing for the app.
+
+4) Add features to the app to allow adding more gifts for each teams such that a team is not limited to only 1 gift.
+
+5) Add one time password (OTP) for authentication.
