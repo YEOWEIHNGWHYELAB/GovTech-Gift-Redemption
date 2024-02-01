@@ -2,7 +2,6 @@ import { useCallback, useState, useContext } from "react";
 import axios from "axios";
 
 import { AuthContext } from "../Contexts/AuthContextProvider";
-import SetHeaderToken from "../Contexts/SetHeaderToken";
 import formatHttpApiError from "../Errors/HTTPAPIERROR";
 import { useSnackbar } from "notistack";
 
@@ -48,6 +47,7 @@ export default function useRequestAuth() {
     }, [handleRequestError, setLoading, setIsAuthenticated]);
 
     const logout = useCallback(() => {
+        setUser(null);
         setLogoutPending(true);
         setIsAuthenticated(false);
         localStorage.removeItem("JWTToken");
